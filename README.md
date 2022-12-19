@@ -1,16 +1,9 @@
-# todolist
+# Fire🔥Note
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A flutter project aimed for keeping short notes in a simple way.
+The app is powered by Cloud Firestore
+Tricky part was the editing feature in the "note_file.dart" file. Tried to copy the way samsung notes provides the editing functionality while tweaking the whole concept in a more custom self-tailored way 
