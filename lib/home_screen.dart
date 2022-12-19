@@ -78,7 +78,7 @@ class NoteTile extends StatelessWidget {
           onTap: (){
             Navigator.push(context,
                 MaterialPageRoute(builder:
-                    (context)=>NotesFile(title: title, content: content,)));
+                    (context)=>NotesFile(docId: id, title: title, content: content,)));
           },
           child: Container(
             height: 120,
