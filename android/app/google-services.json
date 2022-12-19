@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "46335043342",
+    "project_id": "small-notes-350de",
+    "storage_bucket": "small-notes-350de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46335043342:android:dd55a5218d1800ef4f195f",
+        "android_client_info": {
+          "package_name": "com.example.todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46335043342-1m1mce38j2sndsvfpnsh7mft3e94jrmi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFrPxPE3T5ZdoICZ_mQpqO_aSg4Im_N3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46335043342-1m1mce38j2sndsvfpnsh7mft3e94jrmi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
