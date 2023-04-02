@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class NotesFile extends StatefulWidget {
   static const String id = "note_file";
   final String? docId, title, content;
-  const NotesFile(
+  bool? editFlag;
+  NotesFile(
       {
         Key? key,
         this.title,
         this.content,
-        this.docId
+        this.docId,
+        this.editFlag
       }) : super(key: key);
 
   @override
@@ -20,6 +22,8 @@ class _NotesFileState extends State<NotesFile> {
 
   bool isEditable=false;
   bool isClickable = false;
+  bool isNewContent = false;
+  bool isNewTitle = false;
   Color activeColor = Colors.grey;
   TextEditingController? titleController;
   TextEditingController? contentController;
@@ -28,6 +32,13 @@ class _NotesFileState extends State<NotesFile> {
   void initState() {
     titleController = TextEditingController(text: widget.title);
     contentController = TextEditingController(text: widget.content);
+    newTitle = widget.title;
+    newContent = widget.content;
+    setState(() {
+      if(widget.editFlag == true){
+        isEditable = true;
+      }
+    });
     super.initState();
   }
   @override
@@ -65,6 +76,7 @@ class _NotesFileState extends State<NotesFile> {
             onPressed: (){
               setState(() {
                 isEditable = false;
+                widget.editFlag=false;
               });
             },
             icon: Icon(Icons.cancel, color: Colors.red,),
@@ -97,13 +109,20 @@ class _NotesFileState extends State<NotesFile> {
               }
               else{
                 Map<String, dynamic> newNote = {
-                  'title': newTitle,
-                  'content': newContent,
+
+                  'title': newTitle.toString(),
+                  'content': newContent.toString(),
                   'dateCreated': DateTime.now().day.toString() + '/'
                       + DateTime.now().month.toString() + '/'
-                      + DateTime.now().month.toString()
+                      + DateTime.now().year.toString()
                 };
-                FirebaseFirestore.instance.collection("notes").doc(widget.docId).update(newNote);
+                try{
+                  debugPrint(newTitle.toString() + newContent.toString());
+                  debugPrint(newTitle.toString() + newContent.toString());
+                  FirebaseFirestore.instance.collection("notes").doc(widget.docId).update(newNote);
+                } catch(e){
+                  debugPrint(e.toString());
+                }
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Row(
                       children: [

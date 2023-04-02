@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/note_file.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'new_note.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String id = 'home_screen';
-  const HomeScreen({Key? key}) : super(key: key);
+  bool editFlag = false;
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +16,12 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Color(0xff160515),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text("Fire🔥Note"),
-        actions: [
-          IconButton(
-            onPressed: (){},
-            icon: Icon(Icons.help_outline,),
+        title: Text(
+          "Fire🔥Note",
+          style: GoogleFonts.teko(
+            fontSize: 30
           ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.yellowAccent,
@@ -43,11 +44,71 @@ class HomeScreen extends StatelessWidget {
               else{
                 return ListView(
                   children: snapshot.data!.docs.map<Widget>((document){
-                    return NoteTile(
-                      id: document.id,
-                      title: document['title'],
-                      dateCreated: document['dateCreated'],
-                      content: document['content'],
+                    return Dismissible(
+                      key: Key(document.id),
+                      direction: DismissDirection.horizontal,
+                      // here is the code chunk for deleting the note
+                      onDismissed: (direction) {
+                        FirebaseFirestore.instance.collection("notes").doc(document.id).delete();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Row(
+                              children: [
+                                Icon(Icons.check, color: Colors.yellow,),
+                                SizedBox(width: 12,),
+                                Text(
+                                  "Note deleted successfully",
+                                  style: TextStyle(
+                                      color: Colors.white
+                                  ),
+                                ),
+                              ],
+                            ))
+                        );
+                      },
+                      // here is the code chunk for editing the note
+                      confirmDismiss: (direction) async {
+                        if (direction == DismissDirection.startToEnd) {
+                          // Navigate to the edit screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotesFile(docId: document.id, title: document['title'], content: document["content"], editFlag: true,),
+                            ),
+                          );
+                          return false;
+                        }
+                        return true;
+                      },
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.black, Color(0xff160515)],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.delete_forever,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      background: Container(
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.yellowAccent, Colors.deepOrange],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.edit_note,
+                          color: Colors.black,
+                        ),
+                      ),
+                      child: NoteTile(
+                        id: document.id,
+                        title: document['title'],
+                        dateCreated: document['dateCreated'],
+                        content: document['content'],
+                      ),
                     );
                   }).toList(),
                 );
@@ -74,6 +135,7 @@ class NoteTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 5,),
         GestureDetector(
           onTap: (){
             Navigator.push(context,
@@ -120,33 +182,38 @@ class NoteTile extends StatelessWidget {
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: (){},
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.yellow,
-                          ),
-                        ),
-                        IconButton(
                           onPressed: (){
                             showDialog(
                               context: context,
                               builder: (BuildContext context){
                                 return AlertDialog(
+                                  backgroundColor: Colors.grey,
                                   title: Text(
-                                      "Delete"
+                                    "Delete",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   content: Text(
-                                      "Are you sure?"
+                                    "Are you sure?",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   actions: [
                                     OutlinedButton(
+                                      style: ButtonStyle(
+                                        side: MaterialStatePropertyAll(
+                                          BorderSide(color: Colors.white)
+                                        )
+                                      ),
                                       onPressed: (){
                                         Navigator.pop(context);
                                       },
                                       child: Text(
                                         "Cancel",
                                         style: TextStyle(
-                                            color: Colors.black
+                                            color: Colors.white
                                         ),
                                       ),
                                     ),
@@ -155,7 +222,6 @@ class NoteTile extends StatelessWidget {
                                         backgroundColor: MaterialStatePropertyAll(Colors.red),
                                       ),
                                       onPressed: (){
-                                        debugPrint(id);
                                         FirebaseFirestore.instance.collection("notes").doc(id).delete();
                                         ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(content: Row(

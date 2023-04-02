@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
+import 'package:todolist/home_screen.dart';
 
 
 class NewNote extends StatefulWidget {
@@ -12,6 +13,10 @@ class NewNote extends StatefulWidget {
 
 class _NewNoteState extends State<NewNote> {
   String? title, content;
+
+  Future<void> delayPop() async{
+    await Future.delayed(Duration(seconds: 2));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,8 +68,11 @@ class _NewNoteState extends State<NewNote> {
                           ),
                         ),
                       ],
-                    ))
+                    )
+                    )
                 );
+                delayPop().then((value) => Navigator.of(context).pop(HomeScreen.id));
+
               }
             },
             icon: Icon(Icons.check_circle, color: Colors.yellowAccent,),

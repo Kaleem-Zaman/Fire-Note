@@ -23,7 +23,7 @@ class Root extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: HomeScreen.id,
       routes: {
-        HomeScreen.id: (context) => const HomeScreen(),
+        HomeScreen.id: (context) => HomeScreen(),
         NotesFile.id: (context) => NotesFile(),
         NewNote.id: (context) => const NewNote()
       },
